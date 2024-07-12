@@ -9,39 +9,42 @@ import textwrap
 # App title and configuration
 st.set_page_config(page_title="Maitri AI Chatbot")
 
-# Gemini API Credentials
-with st.sidebar:
-    st.title('Maitri AI Chatbot')
-    if 'GEMINI_API_KEY' in st.secrets:
-        st.success('API key already provided!', icon='✅')
-        gemini_api = st.secrets['GEMINI_API_KEY']
-    else:
-        gemini_api = st.text_input('Enter Gemini API token:', type='password')
-        if not gemini_api:
-            st.warning('Please enter your credentials!', icon='⚠️')
-        else:
-            st.success('Proceed to entering your prompt message!', icon='👉')
-    os.environ['GEMINI_API_KEY'] = gemini_api
-
-    # st.subheader('Models and parameters')
-    # temperature = st.sidebar.slider('temperature', min_value=0.01, max_value=5.0, value=0.1, step=0.01)
-    # top_p = st.sidebar.slider('top_p', min_value=0.01, max_value=1.0, value=0.9, step=0.01)
-    # max_length = st.sidebar.slider('max_length', min_value=32, max_value=128, value=120, step=8)
-
 # Configure Gemini API
-genai.configure(api_key=gemini_api)
+if 'GEMINI_API_KEY' in st.secrets:
+    gemini_api = st.secrets['GEMINI_API_KEY']
+else:
+    gemini_api = st.text_input('Enter Gemini API token:', type='password', key='api_input')
+    if gemini_api and gemini_api.startswith('r8_') and len(gemini_api) == 40:
+        st.secrets['GEMINI_API_KEY'] = gemini_api
+        st.experimental_rerun()
 
-# Load JSON data
-data = pd.read_json('data.json')
+if 'GEMINI_API_KEY' in st.secrets:
+    genai.configure(api_key=st.secrets['GEMINI_API_KEY'])
+    hide_sidebar = True
+else:
+    st.sidebar.write("Please enter your API key")
+    hide_sidebar = False
 
-df = pd.DataFrame(data)
-df.columns = ['Title', 'Text']
+# Hide sidebar if API key is set
+if hide_sidebar:
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            display: none;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-# Get the embeddings of each text and add to an embeddings column in the dataframe
-def embed_fn(title, text):
-    return genai.embed_content(model='models/text-embedding-004', content=text)["embedding"]
+# Add logo
+logo_path = "logo.png"
+if os.path.exists(logo_path):
+    st.image(logo_path, width=200)
 
-df['Embeddings'] = df.apply(lambda row: embed_fn(row['Title'], row['Text']), axis=1)
+# Load the dataframe with precomputed embeddings
+df = pd.read_feather('data_with_embeddings.feather')
 
 # Function to find the best passages
 def find_best_passages(query, dataframe, top_n=3):
@@ -57,7 +60,7 @@ def make_prompt(query, relevant_passages):
     prompt = textwrap.dedent(f"""
     Persona: You are Maitri AI Chatbot, representing MaitriAI, a leading software company specializing in web application development, website design, logo design, software development, and cutting-edge AI applications. You are knowledgeable, formal, and detailed in your responses.
 
-    Task: Answer questions about Maitri AI, its services, and related information. Provide detailed and kind responses in a conversational manner.
+    Task: Answer questions about Maitri AI, its services, and related information. Provide detailed and kind responses in a conversational manner.  If the context is relevant to the query, use it to give a comprehensive answer. If the context is not relevant, acknowledge that you do not know the answer.
 
     Format: Respond in a formal and elaborate manner, providing as much relevant information as possible. If you do not know the answer, respond by saying you do not know.
 
@@ -65,13 +68,14 @@ def make_prompt(query, relevant_passages):
 
     QUESTION: '{query}'
     
+
     ANSWER:
     """)
     return prompt
 
 # Store LLM generated responses
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "Welcome to Maitri AI Chatbot! How can I assist you with information about Maitri AI today?"}]
 
 # Display or clear chat messages
 for message in st.session_state.messages:
@@ -79,7 +83,7 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "How may I assist you today?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "Welcome to Maitri AI Chatbot! How can I assist you with information about Maitri AI today?"}]
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 # Function for generating Gemini response
