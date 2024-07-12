@@ -1,0 +1,86 @@
+[
+  {
+    "title": "About Maitri AI",
+    "content": "Maitri AI is an artificial intelligence company focused on developing advanced AI technologies to enhance human experiences and empower businesses across various industries. Their mission is to harness the power of AI to drive innovation, solve complex problems, and create a positive impact on society.  Maitri AI believes in the potential of AI to transform the way we live, work, and interact. They specialize in developing intelligent systems that can understand and interpret human language, recognize patterns in data, make intelligent decisions, and continuously learn and adapt. [1]"
+  },
+  {
+    "title": "Maitri AI Mission",
+    "content": "Maitri AI's mission is to harness AI's potential to transform lives, push boundaries, build ethical solutions, drive social impact, empower individuals, and shape a better future. [2]"
+  },
+  {
+    "title": "Maitri AI Vision",
+    "content": "Maitri AI's vision is to be a leader in the field of Artificial Intelligence and bring positive transformations for both our clients and the global community. [2]"
+  },
+  {
+    "title": "Maitri AI Services",
+    "content": "Maitri AI provides a variety of services, including object detection and identification, object dimension measurement, utility maintenance systems, gas monitoring systems, integrated surveillance system solutions, and turnkey projects for digitization and artificial intelligence. [3, 4]"
+  },
+  {
+    "title": "Maitri AI Expertise",
+    "content": "Maitri AI's team has expertise in data analysis, and a history of handling similar projects. They leverage advanced data analysis techniques to gain strategic insights and provide actionable recommendations tailored to unique requirements. [5]"
+  },
+  {
+    "title": "Maitri AI Values",
+    "content": "Maitri AI prioritizes transparent communication, commitment to timelines, data security and confidentiality, and a collaborative partnership approach with stakeholders. [6]"
+  },
+  {
+    "title": "Music Similarity Matching in Carnatic Music",
+    "content": "An LMS application designed for Carnatic music education. It analyses the fundamental frequency, pitch frequencies, and chroma values of a student and teacher's singing to provide feedback. Its target application is for music learning systems."
+  },
+  {
+    "title": "Speaker Recognition (Deep Learning-Based)",
+    "content": "A system that uses a 2D Convolutional Neural Network (2D CNN) model to recognize speakers from their voice. It was trained on a dataset of 25 speakers (20 male, 5 female), with each speaker recorded saying 5 English sentences. Its target application is for a speech-independent speaker attendance system."
+  },
+  {
+    "title": "Emotion Classification (Deep Learning-Based)",
+    "content": "This project classifies emotions from audio using a 2D CNN. It was trained on a dataset of 1440 audio files (12 male and 12 female) with 8 emotion classes (neutral, calm, happy, sad, angry, fearful, disgust, and surprise). Potential applications include CRMS and Psychiatry."
+  },
+  {
+    "title": "Music Genre Classification (Deep Learning-Based)",
+    "content": "Uses a 2D CNN to classify music genres from audio. Trained on 10,000 audio files (30 seconds each) spanning 10 different music genres. Its target application is music genre classification."
+  },
+  {
+    "title": "Speech to Text ASR API",
+    "content": "Built using the FastAPI framework and the OpenAI Whisper ASR model. This REST API leverages GPU capabilities to process speech input and return text transcriptions. Its target application is to build ASR APIs."
+  },
+  {
+    "title": "Text to Speech (Pyttsx3)",
+    "content": "Another REST API built with FastAPI, this one utilizes the pyttsx3 library to convert text input into spoken audio. It aims to provide a framework for building text-to-speech APIs."
+  },
+  {
+    "title": "Temperature Monitoring System",
+    "content": "This system captures images of a lab-growing process, extracts regions of interest (ROIs), and analyzes RGB values to determine temperature. It uses calibrated temperature data to map RGB values to their corresponding temperatures for real-time monitoring."
+  },
+  {
+    "title": "Image Classification for BCDI (Breakage, Clean, Dot, Inclusion) (YOLO V5-Based)",
+    "content": "Employs the YOLO V5 object detection model to classify rough diamonds based on the presence of breakage, cleanliness, dots, or inclusions. It provides confidence scores and percentage calculations for each classification."
+  },
+  {
+    "title": "Calculating Length, Width, and Height Dimensions with Image Processing",
+    "content": "This project utilizes image processing techniques such as resizing, grayscale conversion, Gaussian blur, adaptive thresholding, and morphological closing to calculate the length, width, and height of objects in images."
+  },
+  {
+    "title": "Image Generation using Stable Diffusion",
+    "content": "Leverages Stable Diffusion to generate images from text prompts. The example provided showcases the generation of a 'diamond ring on my ring finger' image. This project explores the use of generated images for display or demo purposes."
+  },
+  {
+    "title": "OCR (Optical Character Recognition)",
+    "content": "A CRNN-based OCR system developed using the PaddleOCR library. Designed to extract text from images of employee documents, KYC information, and banking documents. A Flask API endpoint allows users to upload images and retrieve extracted text. Target applications include KYC, banking, and verification systems."
+  },
+  {
+    "title": "Custom Sales Chat Bot (Rasa Based)",
+    "content": "Developed using the Rasa toolkit, this chatbot is designed for sales interactions. It understands intents, entities, and dialogue flows and is trained using machine learning for natural conversations."
+  },
+  {
+    "title": "Chat Bot using Text to Speech (Rasa and Pyttsx3 Based)",
+    "content": "This chatbot combines the conversational abilities of Rasa with the text-to-speech functionality of pyttsx3, allowing it to interact with users through both text and spoken responses."
+  },
+  {
+    "title": "CrediSense",
+    "content": "A web application designed to revolutionize credit assessment by predicting credit approval likelihood based on financial and personal attributes. It features multi-factor analysis, predictive analytics, real-time assessment, personalized recommendations, seamless integration, and enhanced security measures."
+  },
+  {
+    "title": "AI-Based Predictive Ship Maintenance of Naval Propulsion System",
+    "content": "Developed for Mazagon Dock Shipbuilders Limited, this project uses linear regression analysis of data from sensors to predict maintenance needs for naval propulsion systems, aiming to optimize maintenance schedules and reduce downtime."
+  }
+]
