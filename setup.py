@@ -1,8 +1,13 @@
 import pandas as pd
 import google.generativeai as genai
+import os
 
 # Configure Gemini API
-genai.configure(api_key='AIzaSyCJyQo4J3-Xa9vpqjzMt6bmtJzxIGEOOjY')
+api_key = os.getenv('GEMINI_API_KEY')
+if not api_key:
+    raise ValueError("GEMINI_API_KEY environment variable not set.")
+
+genai.configure(api_key=api_key)
 
 # Load JSON data
 data = pd.read_json('data.json')
