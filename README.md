@@ -1,10 +1,14 @@
 
-# Maitri AI Chatbot
+# Maitri AI RAG-Based-Chatbot
 
-Maitri AI Chatbot is a Streamlit-based application designed to provide detailed and kind responses to queries about Maitri AI. The chatbot uses the Google Gemini API for generating and embedding content.
+Maitri AI Chatbot is a Streamlit-based application designed to provide detailed and kind responses to queries about Maitri AI. The chatbot uses the Google Gemini API for generating and embedding content. Check the app [here](https://maitriai-chatbot.streamlit.app/)
+
+![image](https://github.com/user-attachments/assets/93fefa93-93e2-48da-b68b-4cec6f767f18)
+
 
 ## Features
 
+- RAG Implementation with Gemini API.
 - Provides information about Maitri AI, its services, and related topics.
 - Precomputes embeddings for faster responses.
 - Retrieves and presents the top 3 relevant passages for comprehensive answers.
@@ -38,29 +42,46 @@ Maitri AI Chatbot is a Streamlit-based application designed to provide detailed 
 ]
 ```
 
-### Step 2: Precompute Embeddings
+### Step 2: Create a Virtual Environment
 
-1. Ensure the required libraries are installed:
+1. Create a virtual environment:
 
 ```bash
-pip install pandas google-generativeai pyarrow
+python3 -m venv env
 ```
 
-2. Run the setup script to compute embeddings and save the DataFrame:
+2. Activate the virtual environment:
+
+- On Windows:
+
+```bash
+.\env\Scripts activate
+```
+
+- On macOS and Linux:
+
+```bash
+source env/bin/activate
+```
+
+3. Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+
+### Step 3: Precompute Embeddings
+
+Run the setup script to compute embeddings and save the DataFrame:
 
 ```bash
 python3 setup.py
 ```
 
-### Step 3: Run the Streamlit Application
+### Step 4: Run the Streamlit Application
 
-1. Ensure the required libraries are installed:
-
-```bash
-pip install streamlit faiss-cpu
-```
-
-2. Run the Streamlit app:
+Run the Streamlit app:
 
 ```bash
 streamlit run app.py
@@ -68,8 +89,8 @@ streamlit run app.py
 
 ## Files
 
-- `data.json`: The JSON file containing data about Maitri AI.
-- `setup.py`: Script to compute embeddings and save the data.
+- `data.json`: The JSON file containing data about Maitri AI. (You can add your data)
+- `setup.py`: Script to compute embeddings and save the data. (For RAG)
 - `app.py`: The main Streamlit application.
 
 ## Usage
