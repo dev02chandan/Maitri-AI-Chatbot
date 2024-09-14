@@ -7,7 +7,7 @@ import pandas as pd
 import textwrap
 
 # App title and configuration
-st.set_page_config(page_title="Maitri AI Chatbot")
+st.set_page_config(page_title="OnlyProfitYou AI Chatbot")
 
 # Configure Gemini API
 if 'GEMINI_API_KEY' in st.secrets:
@@ -51,31 +51,36 @@ def find_best_passages(query, dataframe, top_n=3):
     query_embedding = genai.embed_content(model='models/text-embedding-004', content=query)["embedding"]
     dot_products = np.dot(np.stack(dataframe['Embeddings']), query_embedding)
     top_indices = np.argsort(dot_products)[-top_n:][::-1]
-    return dataframe.iloc[top_indices]['Text'].tolist()
+    
+    # Combine 'Title' and 'Text' for each of the top matches to provide better context
+    return dataframe.iloc[top_indices].apply(lambda row: f"{row['Title']}: {row['Text']}", axis=1).tolist()
 
 # Function to make prompt
 def make_prompt(query, relevant_passages):
     escaped_passages = [passage.replace("'", "").replace('"', "").replace("\n", " ") for passage in relevant_passages]
     joined_passages = "\n\n".join(f"PASSAGE {i+1}: {passage}" for i, passage in enumerate(escaped_passages))
     prompt = textwrap.dedent(f"""
-    Persona: You are Maitri AI Chatbot, representing MaitriAI, a leading software company specializing in web application development, website design, logo design, software development, and cutting-edge AI applications. You are knowledgeable, formal, and detailed in your responses.
+    Persona: You are OnlyProfitYou (OPU) AI Assistant, representing OPU, a transformative platform dedicated to democratizing financial success through stock market trading and education. You are knowledgeable, formal, and detailed in your responses.
 
-    Task: Answer questions about Maitri AI, its services, and related information. Provide detailed and kind responses in a conversational manner.  If the context is relevant to the query, use it to give a comprehensive answer. If the context is not relevant, acknowledge that you do not know the answer. In the end of each answer, you can direct the user to the website: https://maitriai.com/contact-us/, Whatsapp number: 9022049092.
+    Task: Answer questions about OnlyProfitYou (OPU), its services, stock market trading strategies, educational programs, career development, and franchise opportunities. Provide detailed and helpful responses in a conversational manner. If the context from the provided passages is relevant to the query, use it to give a comprehensive answer. If the context is not relevant, acknowledge that you do not know the answer. At the end of your response, direct the user to the website: https://www.onlyprofityou.com for more details.
 
-    Format: Respond in a formal and elaborate manner, providing as much relevant information as possible. If you do not know the answer, respond by saying you do not know.
+    Format: Respond in a formal and informative manner, providing relevant information. If you do not know the answer, respond politely by saying you do not know.
 
     Context: {joined_passages}
 
     QUESTION: '{query}'
-    
 
     ANSWER:
     """)
     return prompt
 
+# Initialize chat history with Gemini's API if not already set
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
 # Store LLM generated responses
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "assistant", "content": "Welcome to Maitri AI Chatbot! How can I assist you with information about Maitri AI today?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "Welcome to OnlyProfitYou AI! How can I assist you with information about OnlyProfitYou today?"}]
 
 # Display or clear chat messages
 for message in st.session_state.messages:
@@ -83,14 +88,31 @@ for message in st.session_state.messages:
         st.write(message["content"])
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "Welcome to Maitri AI Chatbot! How can I assist you with information about Maitri AI today?"}]
+    st.session_state.messages = [{"role": "assistant", "content": "Welcome to OnlyProfitYou AI! How can I assist you with information about OnlyProfitYou today?"}]
+    st.session_state.chat_history = []  # Clear the Gemini chat history
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
-# Function for generating Gemini response
+# Function for generating Gemini response with chat history
 def generate_gemini_response(query):
+    # Retrieve relevant passages
     relevant_passages = find_best_passages(query, df)
+    
+    # Create a prompt with the relevant passages
     prompt = make_prompt(query, relevant_passages)
-    response = genai.GenerativeModel('models/gemini-1.5-flash-latest').generate_content(prompt)
+    
+    # If chat is already ongoing, append new message to the history
+    if "chat" not in st.session_state:
+        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+        st.session_state.chat = model.start_chat(history=st.session_state.chat_history)
+    
+    # Send the user's message to Gemini with the chat history
+    chat = st.session_state.chat
+    response = chat.send_message(prompt)  # Update with the query
+    
+    # Update chat history with user and assistant messages
+    st.session_state.chat_history.append({"role": "user", "parts": prompt})
+    st.session_state.chat_history.append({"role": "assistant", "parts": response.text})
+    
     return response.text
 
 # User-provided prompt
